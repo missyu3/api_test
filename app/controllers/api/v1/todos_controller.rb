@@ -9,7 +9,11 @@ module Api
       end
 
       def show
-        render json: { status: 'SUCCESS', message: 'Loaded the post', data: @todo }
+        if @todo.present?
+          render json: { status: 'SUCCESS', message: 'Loaded the post', data: @todo }
+        else
+          render json: { status: '422', message: 'No ID', data: @todo.errors }
+        end
       end
 
       def create
@@ -37,7 +41,7 @@ module Api
       private
 
       def set_todo
-        @todo = Todo.find(params[:id])
+        @todo = Todo.find_by(params[:id])
       end
 
       def post_params
